@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {
   createAppContainer,
   createMaterialTopTabNavigator,
@@ -7,20 +7,32 @@ import {
 
 import NavigationUtil from '../navigator/NavigationUtil';
 
-const Popular = () => {
+const Popular = props => {
+  const topTabNames = ['Java', 'Android', 'IOS', 'React Native', 'PHP'];
+  const generateTabs = () => {
+    const tabs = {};
+    topTabNames.forEach((item, index) => {
+      tabs[`tab${index}`] = {
+        // eslint-disable-next-line no-shadow
+        screen: props => <PopularTab {...props} tabLabel={item} />,
+        navigationOptions: {
+          title: item,
+        },
+      };
+    });
+    return tabs;
+  };
   const TopTab = createAppContainer(
-    createMaterialTopTabNavigator({
-      PopularTab: {
-        screen: PopularTab,
-        navigationOptions: {
-          title: 'Tab1',
+    createMaterialTopTabNavigator(generateTabs(), {
+      tabBarOptions: {
+        tabStyle: styles.tabStyle,
+        upperCaseLabel: false,
+        scrollEnabled: true,
+        style: {
+          backgroundColor: '#678',
         },
-      },
-      PopularTab2: {
-        screen: PopularTab,
-        navigationOptions: {
-          title: 'Tab2',
-        },
+        indicatorStyle: styles.indicatorStyle,
+        labelStyle: styles.labelStyle,
       },
     }),
   );
@@ -50,5 +62,20 @@ const PopularTab = props => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  tabStyle: {
+    minWidth: 50,
+  },
+  indicatorStyle: {
+    height: 2,
+    backgroundColor: 'white',
+  },
+  labelStyle: {
+    fontSize: 16,
+    marginTop: 6,
+    marginBottom: 6,
+  },
+});
 
 export default Popular;
