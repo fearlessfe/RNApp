@@ -4,6 +4,7 @@ import {BottomTabBar} from 'react-navigation-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {connect} from 'react-redux';
 
 import NavigationUtil from '../navigator/NavigationUtil';
 
@@ -57,10 +58,17 @@ const TABS = {
 
 const DynamicTabNavigator = props => {
   const {Popular, Trending, Favorite, My} = TABS;
+  let Tab;
   const tabs = {Popular, Trending, Favorite, My};
-  const Tab = createAppContainer(
+  const theme = props.theme;
+  if (Tab) {
+    return Tab;
+  }
+  Tab = createAppContainer(
     createBottomTabNavigator(tabs, {
-      tabBarComponent: TabBarComponent,
+      tabBarComponent: navProps => {
+        return <TabBarComponent {...navProps} theme={theme} />;
+      },
     }),
   );
   // 存储外层的navigation，是的内层的页面也能跳转到外层的navigation
@@ -69,26 +77,15 @@ const DynamicTabNavigator = props => {
 };
 
 const TabBarComponent = props => {
-  const [defaultTheme, setDefaultTheme] = useState({
-    tintColor: props.activeTintColor,
-    updateTime: new Date().getTime(),
-  });
-  const {routes, index} = props.navigation.state;
-  if (routes[index].params) {
-    const {theme} = routes[index].params;
-    console.log(theme);
-    // 以最新的更新时间为主，防止被其他tab之前的修改覆盖掉
-    if (theme && theme.updateTime > defaultTheme.updateTime) {
-      setDefaultTheme(theme);
-    }
-  }
-  console.log(defaultTheme);
-  return (
-    <BottomTabBar
-      {...props}
-      activeTintColor={defaultTheme.tintColor || props.activeTintColor}
-    />
-  );
+  // const [defaultTheme, setDefaultTheme] = useState({
+  //   tintColor: props.activeTintColor,
+  //   updateTime: new Date().getTime(),
+  // });
+  return <BottomTabBar {...props} activeTintColor={props.theme} />;
 };
 
-export default DynamicTabNavigator;
+const mapStateToProps = state => ({
+  theme: state.theme.theme,
+});
+
+export default connect(mapStateToProps)(DynamicTabNavigator);

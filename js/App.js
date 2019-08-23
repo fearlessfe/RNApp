@@ -5,19 +5,16 @@
  * @format
  * @flow
  */
-
 import React from 'react';
-import {View, Text} from 'react-native';
-import Navigation from './navigator/AppNavigator';
+import {Provider} from 'react-redux';
+import store from './store';
+import AppNavigation from './navigator/AppNavigator';
 // import {createStackNavigator, createAppContainer} from 'react-navigation';
-
 const App = () => {
   return (
-    <View>
-      <Navigation />
-    </View>
+    <Provider store={store}>
+      <AppNavigation />
+    </Provider>
   );
 };
-// const AppNavigator = createStackNavigator({Home: {screen: App}});
-// export default createAppContainer(AppNavigator);
 export default App;
