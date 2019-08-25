@@ -1,7 +1,9 @@
 import {createNavigationReducer} from 'react-navigation-redux-helpers';
-import themeReducer from './theme';
 import {RootNavigator} from '../navigator/AppNavigator';
 import {combineReducers} from 'redux';
+
+import themeReducer from './theme';
+import popularReducer from './popular';
 
 // const navState = RootNavigator.router.getStateForAction(
 //   RootNavigator.router.getActionForPathAndParams(rootRouter),
@@ -16,4 +18,5 @@ const navReducer = createNavigationReducer(RootNavigator);
 export default combineReducers({
   nav: navReducer,
   theme: themeReducer,
+  popular: popularReducer,
 });
