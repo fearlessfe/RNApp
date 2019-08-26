@@ -5,12 +5,12 @@ import {
   createMaterialTopTabNavigator,
 } from 'react-navigation';
 import {connect} from 'react-redux';
-import {PopularItem} from '../common/PopularItem';
+import PopularItem from '../common/PopularItem';
 
 import NavigationUtil from '../navigator/NavigationUtil';
 import actions from '../action';
 
-const URL = 'https://api.github.com/search/repositories?q=';
+const URL = 'https://api.github.com/search/repositories?q=topic:';
 const QUERY_STR = '&sort=stars';
 const THEME_COLOR = 'red';
 
@@ -70,18 +70,18 @@ const PopularTab = props => {
   const renderItem = data => {
     return (
       <View>
-        <PopularItem item={data} />
+        <PopularItem item={data.item} />
         {/* <Text>111</Text> */}
       </View>
     );
   };
   return (
-    <View>
-      <Text>{tabLabel}</Text>
+    <View style={styles.container}>
       <FlatList
         data={listData.items}
         renderItem={data => renderItem(data)}
         keyExtractor={item => '' + item.id}
+        onRefresh
         refreshControl={
           <RefreshControl
             title={'Loading'}
@@ -114,6 +114,9 @@ const PopularTabPage = connect(
 )(PopularTab);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   tabStyle: {
     minWidth: 50,
   },

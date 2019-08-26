@@ -7,7 +7,7 @@ export default function popularReducer(state = defaultState, action) {
       return {
         ...state,
         [action.storeName]: {
-          ...[action.storeName],
+          ...state[action.storeName],
           isLoading: true,
         },
       };
@@ -15,7 +15,7 @@ export default function popularReducer(state = defaultState, action) {
       return {
         ...state,
         [action.storeName]: {
-          ...[action.storeName],
+          ...state[action.storeName],
           items: action.items,
           isLoading: false,
         },
@@ -24,7 +24,7 @@ export default function popularReducer(state = defaultState, action) {
       return {
         ...state,
         [action.storeName]: {
-          ...[action.storeName],
+          ...state[action.storeName],
           isLoading: false,
         },
       };

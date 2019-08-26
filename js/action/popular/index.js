@@ -1,7 +1,7 @@
 import Types from '../types';
 import DataStore from '../../expand/dao/DataStore';
 
-export const onLoadPopularData = (storeName, url) => {
+export const onLoadPopularData = (storeName, url, pageSize) => {
   return dispitch => {
     dispitch({
       type: Types.POPULAR_REFRESH,
@@ -11,7 +11,7 @@ export const onLoadPopularData = (storeName, url) => {
     dataStore
       .fetchData(url)
       .then(data => {
-        handleData(dispitch, storeName, data);
+        handleData(dispitch, storeName, data, pageSize);
       })
       .catch(error => {
         console.error(error);
@@ -31,3 +31,12 @@ function handleData(dispitch, storeName, data) {
     storeName,
   });
 }
+
+// export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = [], callback) {
+//   return dispitch => {
+//     setTimeout(() => {
+//       if((pageIndex - 1)*pageSize >= dataArray.length){
+//       }
+//     }, 500)
+//   }
+// }
