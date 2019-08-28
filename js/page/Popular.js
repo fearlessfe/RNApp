@@ -9,6 +9,7 @@ import PopularItem from '../common/PopularItem';
 
 import NavigationUtil from '../navigator/NavigationUtil';
 import actions from '../action';
+import NavigationBar from '../common/NavigationBar';
 
 const URL = 'https://api.github.com/search/repositories?q=topic:';
 const QUERY_STR = '&sort=stars';
@@ -43,8 +44,17 @@ const Popular = props => {
       },
     }),
   );
+  let statusBar = {
+    backgroundColor: THEME_COLOR,
+    barStyle: 'light-content',
+  };
   return (
     <View style={{flex: 1, marginTop: 30}}>
+      <NavigationBar
+        title={'最热'}
+        statusBar={statusBar}
+        style={{backgroundColor: THEME_COLOR}}
+      />
       <TopTab />
     </View>
   );
@@ -81,7 +91,6 @@ const PopularTab = props => {
         data={listData.items}
         renderItem={data => renderItem(data)}
         keyExtractor={item => '' + item.id}
-        onRefresh
         refreshControl={
           <RefreshControl
             title={'Loading'}

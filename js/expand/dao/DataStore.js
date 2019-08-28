@@ -1,14 +1,20 @@
 import {AsyncStorage} from 'react-native';
+import GitHubTrending from 'GitHubTrending';
+
+export const FLAG_STORAGE = {
+  flag_popular: 'popular',
+  flag_trending: 'trending',
+};
 
 export default class DataStore {
-  fetchData(url) {
+  fetchData(url, flag = FLAG_STORAGE.flag_popular) {
     return new Promise((resolve, reject) => {
       this.fetchLocalData(url)
         .then(wrapData => {
           if (wrapData && DataStore.checkTimestampValid(wrapData.timestamp)) {
             resolve(wrapData);
           } else {
-            this.fetchNetData(url)
+            this.fetchNetData(url, flag)
               .then(data => {
                 resolve(this._wrapData(data));
               })
@@ -18,7 +24,7 @@ export default class DataStore {
           }
         })
         .catch(error => {
-          this.fetchNetData(url)
+          this.fetchNetData(url, flag)
             .then(data => {
               resolve(this._wrapData(data));
             })
@@ -61,22 +67,37 @@ export default class DataStore {
     });
   }
 
-  fetchNetData(url) {
-    return new Promise((resolve, reject) => {
-      fetch(url)
-        .then(response => {
-          if (response.ok) {
-            return response.json();
+  fetchNetData(url, flag) {
+    if (flag !== FLAG_STORAGE.flag_trending) {
+      return new Promise((resolve, reject) => {
+        fetch(url)
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok');
+          })
+          .then(responseData => {
+            this.saveData(url, responseData);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    } else {
+      new GitHubTrending()
+        .fetchTrending(url)
+        .then(items => {
+          if (!items) {
+            throw new Error('responseData is null');
           }
-          throw new Error('Network response was not ok');
+          this.saveData(url, items);
+          return items;
         })
-        .then(responseData => {
-          this.saveData(url, responseData);
-        })
-        .catch(error => {
-          reject(error);
+        .catch(err => {
+          console.error(err);
         });
-    });
+    }
   }
 
   static checkTimestampValid(timestamp) {

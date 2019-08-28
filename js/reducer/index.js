@@ -4,6 +4,7 @@ import {combineReducers} from 'redux';
 
 import themeReducer from './theme';
 import popularReducer from './popular';
+import trendingReducer from './trending';
 
 // const navState = RootNavigator.router.getStateForAction(
 //   RootNavigator.router.getActionForPathAndParams(rootRouter),
@@ -19,4 +20,5 @@ export default combineReducers({
   nav: navReducer,
   theme: themeReducer,
   popular: popularReducer,
+  trending: trendingReducer,
 });
