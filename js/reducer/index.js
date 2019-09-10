@@ -6,15 +6,7 @@ import themeReducer from './theme';
 import popularReducer from './popular';
 import trendingReducer from './trending';
 
-// const navState = RootNavigator.router.getStateForAction(
-//   RootNavigator.router.getActionForPathAndParams(rootRouter),
-// );
-
 const navReducer = createNavigationReducer(RootNavigator);
-// const navReducer = (state = navState, action) => {
-//   const nextState = RootNavigator.router.getStateForAction(action, state);
-//   return nextState || state;
-// };
 
 export default combineReducers({
   nav: navReducer,
