@@ -66,9 +66,9 @@ const PopularTab = props => {
     loadData();
   }, []);
 
-  const loadData = () => {
+  const loadData = (loadMore) => {
     const url = genFetchUrl(tabLabel);
-    props.onLoadPopularData(tabLabel, url);
+    props.onRefreshPopular(tabLabel, url);
   };
 
   const genFetchUrl = key => {
@@ -113,8 +113,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLoadPopularData: (storeName, url) =>
-    dispatch(actions.onLoadPopularData(storeName, url)),
+  onRefreshPopular: (storeName, url, pageSize) =>
+    dispatch(actions.onRefreshPopular(storeName, url)),
+  onLoadMorePopular: (storeName, url) =>
+    dispatch(actions.onLoadMorePopular(storeName, url)),
 });
 
 const PopularTabPage = connect(
